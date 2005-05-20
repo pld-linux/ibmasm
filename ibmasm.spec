@@ -11,7 +11,9 @@ Source0:	%{name}-src-redhat.tgz
 URL:		http://www.ibm.com/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_prefix	/
+%define		_prefix		/
+%define		_libdir		/lib
+%define		_sbindir	/sbin
 
 %description
 Utilities for IBM Advanced System Management Drivers.
@@ -51,8 +53,7 @@ Management) w maszynach IBM-a.
 chmod -R u+rwX *
 
 %build
-cd src
-%{__make} \
+%{__make} -C src \
 	INC="%{_kernelsrcdir}/include" \
 	CPU=%{arch} \
 	DEBFLAGS="%{rpmcflags} -D__SMP__"
