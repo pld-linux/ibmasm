@@ -1,5 +1,5 @@
 Summary:	IBM Advanced System Management drivers
-Summary(pl):	Sterowniki do Advanced System Management w sprzêcie IBM-a
+Summary(pl.UTF-8):   Sterowniki do Advanced System Management w sprzÄ™cie IBM-a
 Name:		ibmasm
 Version:	1.0
 %define _rel	2
@@ -18,34 +18,34 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Utilities for IBM Advanced System Management Drivers.
 
-%description -l pl
-Narzêdzia do sterowników do zaawansowanego zarz±dzania systemem
+%description -l pl.UTF-8
+NarzÄ™dzia do sterownikÃ³w do zaawansowanego zarzÄ…dzania systemem
 (Advanced System Management) w maszynach IBM-a.
 
 %package -n kernel-misc-ibmasm
 Summary:	IBM Advanced System Management drivers
-Summary(pl):	Sterowniki do Advanced System Management w sprzêcie IBM-a
+Summary(pl.UTF-8):   Sterowniki do Advanced System Management w sprzÄ™cie IBM-a
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 
 %description -n kernel-misc-ibmasm
 IBM Advanced System Management drivers.
 
-%description -n kernel-misc-ibmasm -l pl
-Sterowniki do zaawansowanego zarz±dzania systemem (Advanced System
+%description -n kernel-misc-ibmasm -l pl.UTF-8
+Sterowniki do zaawansowanego zarzÄ…dzania systemem (Advanced System
 Management) w maszynach IBM-a.
 
 %package -n kernel-smp-misc-ibmasm
 Summary:	IBM Advanced System Management SMP drivers
-Summary(pl):	Sterowniki SMP do Advanced System Management w sprzêcie IBM-a
+Summary(pl.UTF-8):   Sterowniki SMP do Advanced System Management w sprzÄ™cie IBM-a
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 
 %description -n kernel-smp-misc-ibmasm
 IBM Advanced System Management SMP drivers.
 
-%description -n kernel-smp-misc-ibmasm -l pl
-Sterowniki SMP do zaawansowanego zarz±dzania systemem (Advanced System
+%description -n kernel-smp-misc-ibmasm -l pl.UTF-8
+Sterowniki SMP do zaawansowanego zarzÄ…dzania systemem (Advanced System
 Management) w maszynach IBM-a.
 
 %prep
