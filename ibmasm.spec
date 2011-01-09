@@ -1,108 +1,59 @@
 Summary:	IBM Advanced System Management drivers
 Summary(pl.UTF-8):	Sterowniki do Advanced System Management w sprzęcie IBM-a
 Name:		ibmasm
-Version:	1.0
-%define _rel	2
-Release:	%{_rel}
-License:	GPL
-Group:		Base/Kernel
-# Taken from CD I got with IBM server
-Source0:	%{name}-src-redhat.tgz
-URL:		http://www.ibm.com/
+Version:	3.0
+Release:	0.1
+License:	LGPL v2 and GPL v2+
+Group:		Applications/System
+Source0:	%{name}_user_%{version}.tar.bz2
+URL:		http://sourceforge.net/projects/ibmasm/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_prefix		/
-%define		_libdir		/lib
-%define		_sbindir	/sbin
-
 %description
-Utilities for IBM Advanced System Management Drivers.
+This package contains the tools necessary to control the IBM Advanced
+System Management Drivers
 
-%description -l pl.UTF-8
-Narzędzia do sterowników do zaawansowanego zarządzania systemem
-(Advanced System Management) w maszynach IBM-a.
+%package devel
+Summary:	Development environment for the IBM Advanced System Management user-land driver
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
 
-%package -n kernel-misc-ibmasm
-Summary:	IBM Advanced System Management drivers
-Summary(pl.UTF-8):	Sterowniki do Advanced System Management w sprzęcie IBM-a
-Release:	%{_rel}@%{_kernel_ver_str}
-Group:		Base/Kernel
-
-%description -n kernel-misc-ibmasm
-IBM Advanced System Management drivers.
-
-%description -n kernel-misc-ibmasm -l pl.UTF-8
-Sterowniki do zaawansowanego zarządzania systemem (Advanced System
-Management) w maszynach IBM-a.
-
-%package -n kernel-smp-misc-ibmasm
-Summary:	IBM Advanced System Management SMP drivers
-Summary(pl.UTF-8):	Sterowniki SMP do Advanced System Management w sprzęcie IBM-a
-Release:	%{_rel}@%{_kernel_ver_str}
-Group:		Base/Kernel
-
-%description -n kernel-smp-misc-ibmasm
-IBM Advanced System Management SMP drivers.
-
-%description -n kernel-smp-misc-ibmasm -l pl.UTF-8
-Sterowniki SMP do zaawansowanego zarządzania systemem (Advanced System
-Management) w maszynach IBM-a.
+%description devel
+The ibmasm-devel package contains the development libraries and header
+files of the IBM Advanced System Management drivers
 
 %prep
-%setup -q -n %{name}-src
-chmod -R u+rwX *
+%setup -q -n %{name}_user_%{version}
 
 %build
-%{__make} -C src \
-	INC="%{_kernelsrcdir}/include" \
-	CPU=%{arch} \
-	DEBFLAGS="%{rpmcflags} -D__SMP__"
-install -d ../smp
-cp ibmasm.o ibmser.o ../smp
-
-%{__make} \
-	INC="%{_kernelsrcdir}/include" \
-	CPU=%{arch} \
-	DEBFLAGS="%{rpmcflags}"
+%{__make} -C ibmasm/src
+	CC="%{__cc}" \
+	CFLAGS="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_libdir}}
+%{__make} -C ibmasm/src install \
+	_LIB=%{_libdir} \
+	ROOT=$RPM_BUILD_ROOT
 
-install shlib/libsysSp.so $RPM_BUILD_ROOT%{_libdir}
-install exe/{ibmsphalt,ibmsprem,ibmsptxt} $RPM_BUILD_ROOT%{_sbindir}
+/sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
 
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
-install src/{ibmasm.o,ibmser.o} $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
-
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc
-install smp/{ibmasm.o,ibmser.o} $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc
+install -d $RPM_BUILD_ROOT%{_includedir}/ibmasm
+cp -a ibmasm/src/api/libibmasm.h ${RPM_BUILD_ROOT}%{_includedir}/ibmasm
+cp -a ibmasm/src/api/rsa.h ${RPM_BUILD_ROOT}%{_includedir}/ibmasm
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -n kernel-misc-ibmasm
-/sbin/depmod -F /boot/System.map -a
-
-%postun -n kernel-misc-ibmasm
-/sbin/depmod -F /boot/System.map -a
-
-%post -n kernel-smp-misc-ibmasm
-/sbin/depmod -F /boot/System.map -a
-
-%postun -n kernel-smp-misc-ibmasm
-/sbin/depmod -F /boot/System.map -a
-
 %files
 %defattr(644,root,root,755)
-%doc README.TXT
-%attr(755,root,root) %{_sbindir}/*
-%attr(755,root,root) %{_libdir}/*
+%doc ibmasm/src/README
+%attr(755,root,root) %{_bindir}/evnode
+%attr(755,root,root) %{_sbindir}/ibmsphalt
+%attr(755,root,root) %{_sbindir}/ibmspup
+%attr(755,root,root) %{_libdir}/libsysSp.so.3.0
 
-%files -n kernel-misc-ibmasm
+%files devel
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}/misc/*
-
-%files -n kernel-smp-misc-ibmasm
-%defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}smp/misc/*
+%{_libdir}/libsysSp.so
+%{_includedir}/ibmasm
