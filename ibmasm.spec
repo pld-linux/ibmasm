@@ -26,16 +26,19 @@ files of the IBM Advanced System Management drivers
 %setup -q -n %{name}_user_%{version}
 
 %build
-%{__make} -C ibmasm/src
+%{__make} -C ibmasm/src \
+	VERSION=3 \
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} -C ibmasm/src install \
+	VERSION=3 \
 	_LIB=%{_libdir} \
 	ROOT=$RPM_BUILD_ROOT
 
+mv $RPM_BUILD_ROOT%{_libdir}/libsysSp.so.{3,3.0.0}
 /sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
 
 install -d $RPM_BUILD_ROOT%{_includedir}/ibmasm
@@ -51,7 +54,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/evnode
 %attr(755,root,root) %{_sbindir}/ibmsphalt
 %attr(755,root,root) %{_sbindir}/ibmspup
-%attr(755,root,root) %{_libdir}/libsysSp.so.3.0
+%attr(755,root,root) %{_libdir}/libsysSp.so.*.*.*
+%ghost %{_libdir}/libsysSp.so.3
 
 %files devel
 %defattr(644,root,root,755)
