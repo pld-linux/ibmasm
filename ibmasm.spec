@@ -5,7 +5,7 @@ Version:	3.0
 Release:	0.1
 License:	LGPL v2 and GPL v2+
 Group:		Applications/System
-Source0:	%{name}_user_%{version}.tar.bz2
+Source0:	http://dl.sourceforge.net/ibmasm/%{name}_user_%{version}.tar.bz2
 URL:		http://sourceforge.net/projects/ibmasm/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
